@@ -42,7 +42,6 @@ public class MainFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.main_fragment, container, false);
         searchView = root.findViewById(R.id.search_view);
-
         recyclerView = root.findViewById(R.id.video_recycler_view);
 
         setSearchView();

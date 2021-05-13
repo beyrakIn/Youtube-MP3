@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:background="@color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragments.MainFragment">
@@ -17,15 +18,11 @@
             android:id="@+id/search_view"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="10dp"
             android:background="@drawable/search_bg"
             android:elevation="5dp"
-            android:inputType="text"
-            android:paddingHorizontal="0dp" />
+            android:inputType="text"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/video_recycler_view"

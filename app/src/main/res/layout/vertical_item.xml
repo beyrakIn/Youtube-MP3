@@ -47,7 +47,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
-            android:layout_marginLeft="7dp"
             android:ellipsize="end"
             android:fontFamily="@font/roboto_bold"
             android:lines="1"
@@ -56,23 +55,25 @@
             android:textSize="17dp" />
 
         <TextView
-            android:id="@+id/item_genres"
+            android:id="@+id/item_channel_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/item_title"
             android:layout_marginStart="7dp"
             android:layout_marginLeft="7dp"
             android:ellipsize="end"
+            android:textColor="@color/white"
             android:fontFamily="@font/nunito_bold"
             android:lines="1" />
 
         <TextView
-            android:id="@+id/item_subtitle"
+            android:id="@+id/item_published_dat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/item_title"
             android:layout_marginStart="7dp"
             android:layout_marginLeft="7dp"
+            android:textColor="@color/white"
             android:layout_marginTop="5dp"
             android:ellipsize="end"
             android:maxLines="6"
