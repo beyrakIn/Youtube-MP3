@@ -20,7 +20,7 @@ public class VideoView extends RecyclerView.ViewHolder {
 
         videoTitle = itemView.findViewById(R.id.item_title);
         videoChannelName = itemView.findViewById(R.id.item_channel_name);
-        videoPublishedDate = itemView.findViewById(R.id.item_published_dat);
+        videoPublishedDate = itemView.findViewById(R.id.item_published_date);
         picture = itemView.findViewById(R.id.item_vertical_picture);
     }
 }
