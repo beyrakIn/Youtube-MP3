@@ -13,6 +13,7 @@ public interface ApiService {
     Call<BaseResponse> searchVideo(
             @Query("part") String part,
             @Query("q") String query,
+            @Query("type") String type,
 //            @Query("videoDuration") String videoDuration,
             @Query("key") String key,
             @Query("maxResults") int maxResults

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.example.ytmusic.databinding.MainActivityBinding;
 import com.example.ytmusic.ui.fragments.MainFragment;
 
 public class MainActivity extends AppCompatActivity {

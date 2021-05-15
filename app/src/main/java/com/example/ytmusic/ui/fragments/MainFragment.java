@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,19 +19,28 @@ import android.widget.SearchView;
 
 import com.example.ytmusic.R;
 import com.example.ytmusic.adapters.VideoAdapter;
+import com.example.ytmusic.databinding.MainFragmentBinding;
 import com.example.ytmusic.models.Video;
 import com.example.ytmusic.ui.viewModels.MainViewModel;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainFragment extends Fragment {
+    private MainFragmentBinding binding;
     private MainViewModel mViewModel;
     private View root;
-    private RecyclerView recyclerView;
     private VideoAdapter videoAdapter;
     private List<Video> videos = new ArrayList<>();
-    private SearchView searchView;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -40,9 +50,8 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.main_fragment, container, false);
-        searchView = root.findViewById(R.id.search_view);
-        recyclerView = root.findViewById(R.id.video_recycler_view);
+        binding = MainFragmentBinding.inflate(inflater, container, false);
+        root = binding.getRoot();
 
         setSearchView();
         return root;
@@ -54,14 +63,35 @@ public class MainFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         videoAdapter = new VideoAdapter(getContext(), videos);
-        recyclerView.setAdapter(videoAdapter);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(25);
+        binding.videoRecyclerView.setAdapter(videoAdapter);
+        binding.videoRecyclerView.setHasFixedSize(true);
+        binding.videoRecyclerView.setItemViewCacheSize(25);
+
+        loadBanner();
+    }
+
+    private void loadBanner() {
+        MobileAds.initialize(getContext(), initializationStatus -> {
+
+        });
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        binding.adView.loadAd(adRequest);
+
+        binding.adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdFailedToLoad(@NonNull @NotNull LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
+                new Handler().postDelayed(() -> {
+                    loadBanner();
+                }, 3000);
+            }
+        });
     }
 
 
     private void setSearchView() {
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 mViewModel.setQuery(query);
@@ -83,5 +113,11 @@ public class MainFragment extends Fragment {
             videos = baseResponse.getVideos();
             videoAdapter.setData(videos);
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

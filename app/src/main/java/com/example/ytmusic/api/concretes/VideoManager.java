@@ -12,8 +12,8 @@ public class VideoManager {
 
 
     public Call<BaseResponse> searchVideo(String query) {
-        String part = "snippet";
-        int maxResults = 25;
-        return apiService.searchVideo(part, query, Constants.YT_API_KEY, maxResults);
+        String part = "snippet", type = "video";
+        int maxResults = 30;
+        return apiService.searchVideo(part, query, type, Constants.YT_API_KEY, maxResults);
     }
 }

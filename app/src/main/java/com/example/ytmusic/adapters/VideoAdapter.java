@@ -1,5 +1,6 @@
 package com.example.ytmusic.adapters;
 
+import android.app.Dialog;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
@@ -7,8 +8,10 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -59,15 +62,37 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoView> {
         holder.itemView.setOnClickListener(v -> {
             String url = Constants.DOWN_URL + video.getId().getVideoId();
 
-            new Thread(() -> {
-                try {
-                    String link = getUrl(url);
-                    download(link, video);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage() + "Erorrrrrr");
-                }
-            }).start();
+            AppCompatActivity activity = (AppCompatActivity) v.getContext();
 
+            Dialog dialog = new Dialog(activity);
+            View view = activity.getLayoutInflater().inflate(R.layout.dialog, null);
+
+            TextView description, yes, no;
+            description = view.findViewById(R.id.description);
+            yes = view.findViewById(R.id.yes);
+            no = view.findViewById(R.id.no);
+            description.setText(video.getSnippet().getTitle());
+
+
+            yes.setOnClickListener(v1 -> {
+                new Thread(() -> {
+
+                    try {
+                        String link = getUrl(url);
+                        download(link, video);
+                    } catch (Exception e) {
+                        System.out.println(e.getLocalizedMessage());
+                    }
+                }).start();
+                dialog.dismiss();
+            });
+
+
+            no.setOnClickListener(v1 -> {
+                dialog.dismiss();
+            });
+            dialog.setContentView(view);
+            dialog.show();
         });
     }
 
@@ -82,11 +107,11 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoView> {
     }
 
 
-    public void download(String url, Video video) {
+    public void download(String url, @NotNull Video video) {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
         request.setTitle("Download");
-        request.setDescription("Downloading " + video.getSnippet().getTitle());
+        request.setDescription(video.getSnippet().getTitle());
         request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MUSIC, video.getSnippet().getTitle() + ".mp3");
@@ -115,7 +140,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoView> {
         return links.get(links.size() - 1);
     }
 
-    public String getBetweenStrings(String text, String textFrom, String textTo) {
+    public String getBetweenStrings(@NotNull String text, String textFrom, String textTo) {
         String result = text.substring(text.indexOf(textFrom) + textFrom.length());
         result = result.substring(0, result.indexOf(textTo));
         return result;
